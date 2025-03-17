@@ -1,8 +1,11 @@
+// variables
 let weatherJSON 
 let minTemp = Infinity
 let maxTemp = -Infinity
 let images = {}
 let dx
+
+// Preload JSON data
 function preload() {
   weatherJSON = loadJSON("https://api.weather.gov/gridpoints/OKX/33,37/forecast")  
 }
@@ -10,18 +13,12 @@ function preload() {
 function setup() {
   createCanvas(600, 400);
   dx = width/(weatherJSON.properties.periods.length+2)
-  
-  // const fit = (img) => {
-  //   img.resize(dx,0)
-  //   redraw()
-  // }
-  
+
+  // min and max of the temp
   for( const p of weatherJSON.properties.periods ) {
     minTemp = min(p.temperature, minTemp)
     maxTemp = max(p.temperature, maxTemp)
-    // if( ! (p.icon in images) ) {
-    //   images[p.icon] = loadImage(p.icon, fit) 
-    // }    
+ 
   }
   noLoop()
 }
@@ -35,10 +32,7 @@ function draw() {
     let cy = map( weatherJSON.properties.periods[i].temperature, minTemp, maxTemp, 0.8*height, 0.2*height)
     line(px,py,cx,cy)
     px = cx
-    py = cy
-    // if( weatherJSON.properties.periods[i].icon in images ) {
-    //   image(images[weatherJSON.properties.periods[i].icon],dx*(i+1),height/2)   
-    // }    
+    py = cy  
   }
   
   // console.log(images)
